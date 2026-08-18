@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Freshers Meet - Entry Scanner</title>
+
+<script
+src="https://unpkg.com/html5-qrcode"
+type="text/javascript">
+</script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f3f4f6;
+
+    color: #111;
+
+}
+
+.header {
+
+    background: #111827;
+
+    color: white;
+
+    padding: 18px;
+
+    text-align: center;
+
+}
+
+.header h1 {
+
+    margin: 0;
+
+    font-size: 26px;
+
+}
+
+.header p {
+
+    margin: 6px 0 0;
+
+    opacity: 0.8;
+
+}
+
+
+/* =====================================================
+   COUNTERS
+   ===================================================== */
+
+.stats {
+
+    display: flex;
+
+    gap: 12px;
+
+    max-width: 600px;
+
+    margin: 15px auto 0;
+
+    padding: 0 15px;
+
+}
+
+.stat {
+
+    flex: 1;
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 16px 10px;
+
+    text-align: center;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.08);
+
+}
+
+.stat-number {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+}
+
+.stat-label {
+
+    margin-top: 4px;
+
+    font-size: 14px;
+
+    color: #666;
+
+}
+
+
+/* =====================================================
+   MAIN
+   ===================================================== */
+
+.container {
+
+    width: 100%;
+
+    max-width: 600px;
+
+    margin: auto;
+
+    padding: 15px;
+
+}
+
+#reader {
+
+    width: 100%;
+
+    background: white;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    margin-top: 15px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.08);
+
+}
+
+#result {
+
+    margin-top: 15px;
+
+    padding: 22px;
+
+    border-radius: 15px;
+
+    background: white;
+
+    text-align: center;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    min-height: 130px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.08);
+
+}
+
+.success {
+
+    background: #d1fae5 !important;
+
+    color: #065f46;
+
+}
+
+.duplicate {
+
+    background: #fef3c7 !important;
+
+    color: #92400e;
+
+}
+
+.invalid {
+
+    background: #fee2e2 !important;
+
+    color: #991b1b;
+
+}
+
+.error {
+
+    background: #fee2e2 !important;
+
+    color: #991b1b;
+
+}
+
+.loading {
+
+    background: #e5e7eb !important;
+
+    color: #374151;
+
+}
+
+.info {
+
+    background: white !important;
+
+    color: #111827;
+
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 450px) {
+
+    .header h1 {
+
+        font-size: 22px;
+
+    }
+
+    .stat-number {
+
+        font-size: 26px;
+
+    }
+
+    #result {
+
+        font-size: 16px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<div class="header">
+
+    <h1>🎉 Freshers Meet</h1>
+
+    <p>Entry Attendance Scanner</p>
+
+</div>
+
+
+<!-- =====================================================
+     COUNTERS
+     ===================================================== -->
+
+<div class="stats">
+
+    <div class="stat">
+
+        <div
+            id="registeredCount"
+            class="stat-number">
+            -
+        </div>
+
+        <div class="stat-label">
+            Registered
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div
+            id="presentCount"
+            class="stat-number">
+            -
+        </div>
+
+        <div class="stat-label">
+            Present
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div
+            id="remainingCount"
+            class="stat-number">
+            -
+        </div>
+
+        <div class="stat-label">
+            Remaining
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SCANNER
+     ===================================================== -->
+
+<div class="container">
+
+    <div id="reader"></div>
+
+
+    <div
+        id="result"
+        class="info">
+
+        📷 Point the camera at a student's QR code
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+// ========================================================
+// IMPORTANT
+// PASTE YOUR GOOGLE APPS SCRIPT /exec URL HERE
+// ========================================================
+
+const API_URL =
+" https://script.google.com/macros/s/AKfycbzX9E0E79rxA3Wm8Vr9y3VrSYqHuYUbxc03HB-HM7KkonQ6zXhXhioTF6DrdSHSNDJCZQ/exec";
+
+
+// ========================================================
+// VARIABLES
+// ========================================================
+
+let scanner = null;
+
+let scanning = false;
+
+
+// ========================================================
+// UPDATE COUNTERS
+// ========================================================
+
+function updateCounts(
+    registered,
+    present
+) {
+
+    registered =
+        Number(registered) || 0;
+
+    present =
+        Number(present) || 0;
+
+
+    document.getElementById(
+        "registeredCount"
+    ).textContent =
+        registered;
+
+
+    document.getElementById(
+        "presentCount"
+    ).textContent =
+        present;
+
+
+    document.getElementById(
+        "remainingCount"
+    ).textContent =
+        Math.max(
+            registered - present,
+            0
+        );
+
+}
+
+
+// ========================================================
+// DISPLAY RESULT
+// ========================================================
+
+function showResult(
+    type,
+    message
+) {
+
+    const result =
+        document.getElementById(
+            "result"
+        );
+
+    result.className =
+        type;
+
+    result.innerHTML =
+        message;
+
+}
+
+
+// ========================================================
+// ESCAPE HTML
+// ========================================================
+
+function escapeHTML(
+    value
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        String(value);
+
+    return div.innerHTML;
+
+}
+
+
+// ========================================================
+// GET CURRENT STATISTICS
+// ========================================================
+
+function loadStatistics() {
+
+    const callbackName =
+        "stats_" +
+        Date.now();
+
+
+    window[callbackName] =
+        function(response) {
+
+            console.log(
+                "Statistics:",
+                response
+            );
+
+
+            updateCounts(
+                response.registered,
+                response.present
+            );
+
+
+            delete window[
+                callbackName
+            ];
+
+        };
+
+
+    const script =
+        document.createElement(
+            "script"
+        );
+
+
+    script.src =
+
+        API_URL +
+
+        "?callback=" +
+
+        encodeURIComponent(
+            callbackName
+        );
+
+
+    script.onerror =
+        function() {
+
+            console.error(
+                "Statistics server connection failed."
+            );
+
+            delete window[
+                callbackName
+            ];
+
+        };
+
+
+    document.body.appendChild(
+        script
+    );
+
+}
+
+
+// ========================================================
+// CHECK QR
+// ========================================================
+
+function checkQR(
+    registrationID
+) {
+
+    showResult(
+        "loading",
+        "⏳ Checking registration..."
+    );
+
+
+    const callbackName =
+        "attendance_" +
+        Date.now();
+
+
+    window[callbackName] =
+        function(response) {
+
+            console.log(
+                "Attendance response:",
+                response
+            );
+
+
+            delete window[
+                callbackName
+            ];
+
+
+            // -----------------------------------------------
+            // UPDATE COUNTERS
+            // -----------------------------------------------
+
+            updateCounts(
+                response.registered,
+                response.present
+            );
+
+
+            // -----------------------------------------------
+            // SUCCESS
+            // -----------------------------------------------
+
+            if (
+                response.status ===
+                "success"
+            ) {
+
+                showResult(
+
+                    "success",
+
+                    "🟢 ENTRY CONFIRMED" +
+
+                    "<br><br>" +
+
+                    "Name: <b>" +
+
+                    escapeHTML(
+                        response.name
+                    ) +
+
+                    "</b>" +
+
+                    "<br>" +
+
+                    "Registration ID: <b>" +
+
+                    escapeHTML(
+                        response.registrationID
+                    ) +
+
+                    "</b>" +
+
+                    "<br><br>" +
+
+                    "Entry Time: " +
+
+                    escapeHTML(
+                        response.time
+                    )
+
+                );
+
+            }
+
+
+            // -----------------------------------------------
+            // DUPLICATE
+            // -----------------------------------------------
+
+            else if (
+                response.status ===
+                "duplicate"
+            ) {
+
+                showResult(
+
+                    "duplicate",
+
+                    "🟠 ALREADY CHECKED IN" +
+
+                    "<br><br>" +
+
+                    "Name: <b>" +
+
+                    escapeHTML(
+                        response.name
+                    ) +
+
+                    "</b>" +
+
+                    "<br>" +
+
+                    "Registration ID: <b>" +
+
+                    escapeHTML(
+                        response.registrationID
+                    ) +
+
+                    "</b>" +
+
+                    "<br><br>" +
+
+                    "First Entry: " +
+
+                    escapeHTML(
+                        response.time
+                    )
+
+                );
+
+            }
+
+
+            // -----------------------------------------------
+            // INVALID
+            // -----------------------------------------------
+
+            else if (
+                response.status ===
+                "invalid"
+            ) {
+
+                showResult(
+
+                    "invalid",
+
+                    "🔴 INVALID QR CODE" +
+
+                    "<br><br>" +
+
+                    "Registration ID: <b>" +
+
+                    escapeHTML(
+                        response.registrationID ||
+                        registrationID
+                    ) +
+
+                    "</b>"
+
+                );
+
+            }
+
+
+            // -----------------------------------------------
+            // SERVER ERROR
+            // -----------------------------------------------
+
+            else {
+
+                showResult(
+
+                    "error",
+
+                    "❌ SERVER ERROR" +
+
+                    "<br><br>" +
+
+                    escapeHTML(
+                        response.message ||
+                        "Unknown server error"
+                    )
+
+                );
+
+            }
+
+
+            // Restart scanner
+
+            setTimeout(
+                startScanner,
+                2500
+            );
+
+        };
+
+
+    // =====================================================
+    // JSONP REQUEST
+    // =====================================================
+
+    const script =
+        document.createElement(
+            "script"
+        );
+
+
+    script.src =
+
+        API_URL +
+
+        "?id=" +
+
+        encodeURIComponent(
+            registrationID
+        ) +
+
+        "&callback=" +
+
+        encodeURIComponent(
+            callbackName
+        );
+
+
+    script.onerror =
+        function() {
+
+            console.error(
+                "Attendance API connection failed."
+            );
+
+
+            delete window[
+                callbackName
+            ];
+
+
+            showResult(
+
+                "error",
+
+                "❌ Cannot connect to attendance server."
+
+            );
+
+
+            setTimeout(
+                startScanner,
+                2500
+            );
+
+        };
+
+
+    document.body.appendChild(
+        script
+    );
+
+}
+
+
+// ========================================================
+// QR FOUND
+// ========================================================
+
+function onScanSuccess(
+    decodedText
+) {
+
+    if (scanning) {
+
+        return;
+
+    }
+
+
+    scanning = true;
+
+
+    const registrationID =
+        decodedText.trim();
+
+
+    console.log(
+        "QR scanned:",
+        registrationID
+    );
+
+
+    if (scanner) {
+
+        scanner
+            .clear()
+            .catch(
+                function() {}
+            );
+
+    }
+
+
+    checkQR(
+        registrationID
+    );
+
+}
+
+
+// ========================================================
+// NORMAL SCAN FAILURE
+// ========================================================
+
+function onScanFailure(
+    error
+) {
+
+    // Ignore normal failures.
+
+}
+
+
+// ========================================================
+// START SCANNER
+// ========================================================
+
+function startScanner() {
+
+    scanning = false;
+
+
+    const reader =
+        document.getElementById(
+            "reader"
+        );
+
+
+    reader.innerHTML = "";
+
+
+    scanner =
+        new Html5QrcodeScanner(
+
+            "reader",
+
+            {
+
+                fps: 10,
+
+                qrbox: {
+
+                    width: 250,
+
+                    height: 250
+
+                },
+
+                rememberLastUsedCamera:
+                    true
+
+            },
+
+            false
+
+        );
+
+
+    scanner.render(
+
+        onScanSuccess,
+
+        onScanFailure
+
+    );
+
+}
+
+
+// ========================================================
+// START
+// ========================================================
+
+loadStatistics();
+
+startScanner();
+
+
+// ========================================================
+// REFRESH COUNTS EVERY 5 SECONDS
+// ========================================================
+
+setInterval(
+    loadStatistics,
+    5000
+);
+
+
+</script>
+
+</body>
+
+</html>
