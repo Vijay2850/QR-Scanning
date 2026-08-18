@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
+
+<title>Freshers Meet QR Scanner</title>
+
+<script src="https://unpkg.com/html5-qrcode"
+        type="text/javascript">
+</script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    text-align: center;
+}
+
+.header {
+    background: #111;
+    color: white;
+    padding: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 26px;
+}
+
+.header p {
+    margin: 8px 0 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 15px;
+}
+
+#reader {
+    width: 100%;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 25px;
+    border-radius: 15px;
+    background: white;
+    font-size: 20px;
+    font-weight: bold;
+    min-height: 110px;
+}
+
+.success {
+    background: #d4edda !important;
+    color: #155724;
+}
+
+.duplicate {
+    background: #fff3cd !important;
+    color: #856404;
+}
+
+.invalid {
+    background: #f8d7da !important;
+    color: #721c24;
+}
+
+.error {
+    background: #f8d7da !important;
+    color: #721c24;
+}
+
+.loading {
+    background: #e2e3e5 !important;
+    color: #383d41;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="header">
+
+    <h1>🎉 Freshers Meet</h1>
+
+    <p>Entry QR Scanner</p>
+
+</div>
+
+
+<div class="container">
+
+    <div id="reader"></div>
+
+    <div id="result">
+        📷 Point the camera at a QR code
+    </div>
+
+</div>
+
+
+<script>
+
+
+// ==================================================
+// YOUR APPS SCRIPT API
+// ==================================================
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyKc6GiLjQH-DCquXjg_33NOn0RD-BRfjwoPW26UcyPU79DN9fq2gZp9gr2vf2S51xTEA/exec";
+
+
+let scanner = null;
+let scanning = false;
+
+
+// ==================================================
+// DISPLAY RESULT
+// ==================================================
+
+function showResult(type, message) {
+
+    const result =
+        document.getElementById("result");
+
+    result.className = type;
+
+    result.innerHTML = message;
+
+}
+
+
+// ==================================================
+// ESCAPE HTML
+// ==================================================
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        String(value);
+
+    return div.innerHTML;
+
+}
+
+
+// ==================================================
+// SEND QR TO GOOGLE APPS SCRIPT
+// ==================================================
+
+async function checkQR(registrationID) {
+
+    showResult(
+        "loading",
+        "⏳ Checking registration..."
+    );
+
+    try {
+
+        const url =
+            API_URL +
+            "?id=" +
+            encodeURIComponent(
+                registrationID
+            );
+
+        console.log(
+            "Sending request:",
+            url
+        );
+
+
+        const response =
+            await fetch(url, {
+
+                method: "GET",
+
+                mode: "cors",
+
+                cache: "no-cache"
+
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server returned HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Server response:",
+            data
+        );
+
+
+        // ==========================
+        // SUCCESS
+        // ==========================
+
+        if (
+            data.status ===
+            "success"
+        ) {
+
+            showResult(
+
+                "success",
+
+                "🟢 ENTRY CONFIRMED" +
+
+                "<br><br>" +
+
+                "Name: <b>" +
+
+                escapeHTML(
+                    data.name
+                ) +
+
+                "</b>" +
+
+                "<br>" +
+
+                "Registration ID: <b>" +
+
+                escapeHTML(
+                    data.registrationID
+                ) +
+
+                "</b>" +
+
+                "<br><br>" +
+
+                "Entry Time: " +
+
+                escapeHTML(
+                    data.time
+                )
+
+            );
+
+        }
+
+
+        // ==========================
+        // DUPLICATE
+        // ==========================
+
+        else if (
+            data.status ===
+            "duplicate"
+        ) {
+
+            showResult(
+
+                "duplicate",
+
+                "🟠 ALREADY CHECKED IN" +
+
+                "<br><br>" +
+
+                "Name: <b>" +
+
+                escapeHTML(
+                    data.name
+                ) +
+
+                "</b>" +
+
+                "<br>" +
+
+                "Registration ID: <b>" +
+
+                escapeHTML(
+                    data.registrationID
+                ) +
+
+                "</b>" +
+
+                "<br><br>" +
+
+                "First Entry: " +
+
+                escapeHTML(
+                    data.time
+                )
+
+            );
+
+        }
+
+
+        // ==========================
+        // INVALID
+        // ==========================
+
+        else if (
+            data.status ===
+            "invalid"
+        ) {
+
+            showResult(
+
+                "invalid",
+
+                "🔴 INVALID QR CODE" +
+
+                "<br><br>" +
+
+                "Registration ID: <b>" +
+
+                escapeHTML(
+                    data.registrationID ||
+                    registrationID
+                ) +
+
+                "</b>"
+
+            );
+
+        }
+
+
+        // ==========================
+        // ERROR
+        // ==========================
+
+        else {
+
+            showResult(
+
+                "error",
+
+                "❌ SERVER ERROR<br><br>" +
+
+                escapeHTML(
+                    data.message ||
+                    "Unknown error"
+                )
+
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Attendance error:",
+            error
+        );
+
+
+        showResult(
+
+            "error",
+
+            "❌ CANNOT CONNECT TO ATTENDANCE SERVER" +
+
+            "<br><br>" +
+
+            escapeHTML(
+                error.message
+            )
+
+        );
+
+    }
+
+
+    // Allow next scan
+    setTimeout(
+        startScanner,
+        3000
+    );
+
+}
+
+
+// ==================================================
+// QR SUCCESS
+// ==================================================
+
+function onScanSuccess(decodedText) {
+
+    if (scanning) {
+        return;
+    }
+
+    scanning = true;
+
+
+    if (scanner) {
+
+        scanner
+            .clear()
+            .catch(
+                function() {}
+            );
+
+    }
+
+
+    checkQR(
+        decodedText.trim()
+    );
+
+}
+
+
+// ==================================================
+// SCAN FAILURE
+// ==================================================
+
+function onScanFailure(error) {
+
+    // Normal scanning failures are ignored.
+
+}
+
+
+// ==================================================
+// START CAMERA
+// ==================================================
+
+function startScanner() {
+
+    scanning = false;
+
+    const reader =
+        document.getElementById(
+            "reader"
+        );
+
+    reader.innerHTML = "";
+
+
+    scanner =
+        new Html5QrcodeScanner(
+
+            "reader",
+
+            {
+
+                fps: 10,
+
+                qrbox: {
+                    width: 250,
+                    height: 250
+                },
+
+                rememberLastUsedCamera:
+                    true
+
+            },
+
+            false
+
+        );
+
+
+    scanner.render(
+        onScanSuccess,
+        onScanFailure
+    );
+
+}
+
+
+// ==================================================
+// START
+// ==================================================
+
+startScanner();
+
+</script>
+
+</body>
+
+</html>
