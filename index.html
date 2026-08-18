@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
 
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1">
 
-<title>Freshers Meet - Entry Scanner</title>
+<title>Freshers Party 2026 - Scanner</title>
 
-<script
-src="https://unpkg.com/html5-qrcode"
-type="text/javascript">
+<script src="https://unpkg.com/html5-qrcode"
+        type="text/javascript">
 </script>
 
 <style>
@@ -27,229 +27,237 @@ body {
 
     font-family:
         Arial,
-        Helvetica,
         sans-serif;
 
-    background: #f3f4f6;
+    background:
+        #f4f4f4;
 
-    color: #111;
+    text-align: center;
 
 }
 
 .header {
 
-    background: #111827;
+    background:
+        #111;
 
-    color: white;
+    color:
+        white;
 
-    padding: 18px;
-
-    text-align: center;
+    padding:
+        20px;
 
 }
 
 .header h1 {
 
-    margin: 0;
+    margin:
+        0;
 
-    font-size: 26px;
+    font-size:
+        25px;
 
 }
 
 .header p {
 
-    margin: 6px 0 0;
-
-    opacity: 0.8;
+    margin:
+        8px 0 0;
 
 }
 
 
-/* =====================================================
-   COUNTERS
-   ===================================================== */
-
 .stats {
 
-    display: flex;
+    display:
+        flex;
 
-    gap: 12px;
+    gap:
+        10px;
 
-    max-width: 600px;
+    padding:
+        12px;
 
-    margin: 15px auto 0;
+    max-width:
+        600px;
 
-    padding: 0 15px;
+    margin:
+        auto;
 
 }
 
 .stat {
 
-    flex: 1;
+    flex:
+        1;
 
-    background: white;
+    background:
+        white;
 
-    border-radius: 14px;
+    border-radius:
+        14px;
 
-    padding: 16px 10px;
-
-    text-align: center;
+    padding:
+        15px;
 
     box-shadow:
         0 2px 8px
-        rgba(0,0,0,0.08);
+        rgba(0,0,0,.08);
 
 }
 
 .stat-number {
 
-    font-size: 30px;
+    font-size:
+        32px;
 
-    font-weight: bold;
+    font-weight:
+        bold;
 
 }
 
 .stat-label {
 
-    margin-top: 4px;
+    font-size:
+        14px;
 
-    font-size: 14px;
-
-    color: #666;
+    margin-top:
+        5px;
 
 }
 
-
-/* =====================================================
-   MAIN
-   ===================================================== */
 
 .container {
 
-    width: 100%;
+    width:
+        100%;
 
-    max-width: 600px;
+    max-width:
+        600px;
 
-    margin: auto;
+    margin:
+        auto;
 
-    padding: 15px;
+    padding:
+        10px 15px 30px;
 
 }
+
 
 #reader {
 
-    width: 100%;
+    width:
+        100%;
 
-    background: white;
+    background:
+        white;
 
-    border-radius: 15px;
+    border-radius:
+        15px;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
-    margin-top: 15px;
-
-    box-shadow:
-        0 2px 8px
-        rgba(0,0,0,0.08);
+    margin-top:
+        5px;
 
 }
+
 
 #result {
 
-    margin-top: 15px;
+    margin-top:
+        15px;
 
-    padding: 22px;
+    padding:
+        22px;
 
-    border-radius: 15px;
+    border-radius:
+        15px;
 
-    background: white;
+    background:
+        white;
 
-    text-align: center;
+    font-size:
+        18px;
 
-    font-size: 18px;
+    font-weight:
+        bold;
 
-    font-weight: bold;
-
-    min-height: 130px;
-
-    box-shadow:
-        0 2px 8px
-        rgba(0,0,0,0.08);
+    min-height:
+        110px;
 
 }
+
 
 .success {
 
-    background: #d1fae5 !important;
+    background:
+        #d4edda !important;
 
-    color: #065f46;
+    color:
+        #155724;
 
 }
+
 
 .duplicate {
 
-    background: #fef3c7 !important;
+    background:
+        #fff3cd !important;
 
-    color: #92400e;
+    color:
+        #856404;
 
 }
+
 
 .invalid {
 
-    background: #fee2e2 !important;
+    background:
+        #f8d7da !important;
 
-    color: #991b1b;
+    color:
+        #721c24;
 
 }
+
 
 .error {
 
-    background: #fee2e2 !important;
+    background:
+        #f8d7da !important;
 
-    color: #991b1b;
+    color:
+        #721c24;
 
 }
+
 
 .loading {
 
-    background: #e5e7eb !important;
+    background:
+        #e2e3e5 !important;
 
-    color: #374151;
-
-}
-
-.info {
-
-    background: white !important;
-
-    color: #111827;
+    color:
+        #383d41;
 
 }
 
 
-/* =====================================================
-   MOBILE
-   ===================================================== */
+button {
 
-@media (max-width: 450px) {
+    border:
+        none;
 
-    .header h1 {
+    border-radius:
+        10px;
 
-        font-size: 22px;
+    padding:
+        12px 20px;
 
-    }
-
-    .stat-number {
-
-        font-size: 26px;
-
-    }
-
-    #result {
-
-        font-size: 16px;
-
-    }
+    font-size:
+        16px;
 
 }
 
@@ -261,35 +269,28 @@ body {
 <body>
 
 
-<!-- =====================================================
-     HEADER
-     ===================================================== -->
-
 <div class="header">
 
-    <h1>🎉 Freshers Meet</h1>
+    <h1>🎉 Freshers Party 2026</h1>
 
-    <p>Entry Attendance Scanner</p>
+    <p>Entry QR Scanner</p>
 
 </div>
 
-
-<!-- =====================================================
-     COUNTERS
-     ===================================================== -->
 
 <div class="stats">
 
     <div class="stat">
 
         <div
-            id="registeredCount"
-            class="stat-number">
+            class="stat-number"
+            id="registered">
             -
         </div>
 
-        <div class="stat-label">
-            Registered
+        <div
+            class="stat-label">
+            REGISTERED
         </div>
 
     </div>
@@ -298,28 +299,14 @@ body {
     <div class="stat">
 
         <div
-            id="presentCount"
-            class="stat-number">
+            class="stat-number"
+            id="present">
             -
         </div>
-
-        <div class="stat-label">
-            Present
-        </div>
-
-    </div>
-
-
-    <div class="stat">
 
         <div
-            id="remainingCount"
-            class="stat-number">
-            -
-        </div>
-
-        <div class="stat-label">
-            Remaining
+            class="stat-label">
+            PRESENT
         </div>
 
     </div>
@@ -327,20 +314,14 @@ body {
 </div>
 
 
-<!-- =====================================================
-     SCANNER
-     ===================================================== -->
-
 <div class="container">
 
     <div id="reader"></div>
 
 
-    <div
-        id="result"
-        class="info">
+    <div id="result">
 
-        📷 Point the camera at a student's QR code
+        📷 Point the camera at a QR code
 
     </div>
 
@@ -350,66 +331,45 @@ body {
 <script>
 
 
-// ========================================================
-// IMPORTANT
-// PASTE YOUR GOOGLE APPS SCRIPT /exec URL HERE
-// ========================================================
+/************************************************
+ * IMPORTANT
+ *
+ * PUT YOUR APPS SCRIPT /EXEC URL HERE
+ ************************************************/
 
 const API_URL =
-" https://script.google.com/macros/s/AKfycbzX9E0E79rxA3Wm8Vr9y3VrSYqHuYUbxc03HB-HM7KkonQ6zXhXhioTF6DrdSHSNDJCZQ/exec";
+"https://script.google.com/macros/s/AKfycbwxvYNdhrAH3YhlZkOdGO1Mx5fNpASyMqrb1h5H2CWsl0VhfaFjKd_TLGU0V6G2KTw9YA/exec";
 
 
-// ========================================================
-// VARIABLES
-// ========================================================
+/************************************************
+ * VARIABLES
+ ************************************************/
 
 let scanner = null;
 
-let scanning = false;
+let processing = false;
 
 
-// ========================================================
-// UPDATE COUNTERS
-// ========================================================
+/************************************************
+ * ESCAPE HTML
+ ************************************************/
 
-function updateCounts(
-    registered,
-    present
-) {
+function escapeHTML(value) {
 
-    registered =
-        Number(registered) || 0;
+    const div =
+        document.createElement("div");
 
-    present =
-        Number(present) || 0;
+    div.textContent =
+        String(value || "");
 
-
-    document.getElementById(
-        "registeredCount"
-    ).textContent =
-        registered;
-
-
-    document.getElementById(
-        "presentCount"
-    ).textContent =
-        present;
-
-
-    document.getElementById(
-        "remainingCount"
-    ).textContent =
-        Math.max(
-            registered - present,
-            0
-        );
+    return div.innerHTML;
 
 }
 
 
-// ========================================================
-// DISPLAY RESULT
-// ========================================================
+/************************************************
+ * SHOW RESULT
+ ************************************************/
 
 function showResult(
     type,
@@ -430,52 +390,55 @@ function showResult(
 }
 
 
-// ========================================================
-// ESCAPE HTML
-// ========================================================
+/************************************************
+ * UPDATE COUNTS
+ ************************************************/
 
-function escapeHTML(
-    value
-) {
+function updateCounts(data) {
 
-    const div =
-        document.createElement(
-            "div"
-        );
+    if (
+        typeof data.registered !==
+        "undefined"
+    ) {
 
-    div.textContent =
-        String(value);
+        document.getElementById(
+            "registered"
+        ).textContent =
+            data.registered;
 
-    return div.innerHTML;
+    }
+
+
+    if (
+        typeof data.present !==
+        "undefined"
+    ) {
+
+        document.getElementById(
+            "present"
+        ).textContent =
+            data.present;
+
+    }
 
 }
 
 
-// ========================================================
-// GET CURRENT STATISTICS
-// ========================================================
+/************************************************
+ * LOAD COUNTS
+ ************************************************/
 
-function loadStatistics() {
+function loadCounts() {
 
     const callbackName =
-        "stats_" +
+        "countCallback_" +
         Date.now();
 
 
     window[callbackName] =
-        function(response) {
+        function(data) {
 
-            console.log(
-                "Statistics:",
-                response
-            );
-
-
-            updateCounts(
-                response.registered,
-                response.present
-            );
-
+            updateCounts(data);
 
             delete window[
                 callbackName
@@ -491,11 +454,8 @@ function loadStatistics() {
 
 
     script.src =
-
         API_URL +
-
         "?callback=" +
-
         encodeURIComponent(
             callbackName
         );
@@ -503,10 +463,6 @@ function loadStatistics() {
 
     script.onerror =
         function() {
-
-            console.error(
-                "Statistics server connection failed."
-            );
 
             delete window[
                 callbackName
@@ -522,9 +478,9 @@ function loadStatistics() {
 }
 
 
-// ========================================================
-// CHECK QR
-// ========================================================
+/************************************************
+ * CHECK QR
+ ************************************************/
 
 function checkQR(
     registrationID
@@ -537,17 +493,21 @@ function checkQR(
 
 
     const callbackName =
-        "attendance_" +
+        "attendanceCallback_" +
         Date.now();
 
 
-    window[callbackName] =
-        function(response) {
+    let finished = false;
 
-            console.log(
-                "Attendance response:",
-                response
-            );
+
+    window[callbackName] =
+        function(data) {
+
+            if (finished) {
+                return;
+            }
+
+            finished = true;
 
 
             delete window[
@@ -555,22 +515,15 @@ function checkQR(
             ];
 
 
-            // -----------------------------------------------
-            // UPDATE COUNTERS
-            // -----------------------------------------------
-
-            updateCounts(
-                response.registered,
-                response.present
-            );
+            updateCounts(data);
 
 
-            // -----------------------------------------------
-            // SUCCESS
-            // -----------------------------------------------
+            /****************************************
+             * SUCCESS
+             ****************************************/
 
             if (
-                response.status ===
+                data.status ===
                 "success"
             ) {
 
@@ -585,7 +538,7 @@ function checkQR(
                     "Name: <b>" +
 
                     escapeHTML(
-                        response.name
+                        data.name
                     ) +
 
                     "</b>" +
@@ -595,7 +548,7 @@ function checkQR(
                     "Registration ID: <b>" +
 
                     escapeHTML(
-                        response.registrationID
+                        data.registrationID
                     ) +
 
                     "</b>" +
@@ -605,7 +558,7 @@ function checkQR(
                     "Entry Time: " +
 
                     escapeHTML(
-                        response.time
+                        data.time
                     )
 
                 );
@@ -613,12 +566,12 @@ function checkQR(
             }
 
 
-            // -----------------------------------------------
-            // DUPLICATE
-            // -----------------------------------------------
+            /****************************************
+             * DUPLICATE
+             ****************************************/
 
             else if (
-                response.status ===
+                data.status ===
                 "duplicate"
             ) {
 
@@ -633,7 +586,7 @@ function checkQR(
                     "Name: <b>" +
 
                     escapeHTML(
-                        response.name
+                        data.name
                     ) +
 
                     "</b>" +
@@ -643,7 +596,7 @@ function checkQR(
                     "Registration ID: <b>" +
 
                     escapeHTML(
-                        response.registrationID
+                        data.registrationID
                     ) +
 
                     "</b>" +
@@ -653,7 +606,7 @@ function checkQR(
                     "First Entry: " +
 
                     escapeHTML(
-                        response.time
+                        data.time
                     )
 
                 );
@@ -661,12 +614,12 @@ function checkQR(
             }
 
 
-            // -----------------------------------------------
-            // INVALID
-            // -----------------------------------------------
+            /****************************************
+             * INVALID
+             ****************************************/
 
             else if (
-                response.status ===
+                data.status ===
                 "invalid"
             ) {
 
@@ -681,8 +634,7 @@ function checkQR(
                     "Registration ID: <b>" +
 
                     escapeHTML(
-                        response.registrationID ||
-                        registrationID
+                        data.registrationID
                     ) +
 
                     "</b>"
@@ -692,9 +644,9 @@ function checkQR(
             }
 
 
-            // -----------------------------------------------
-            // SERVER ERROR
-            // -----------------------------------------------
+            /****************************************
+             * SERVER ERROR
+             ****************************************/
 
             else {
 
@@ -707,8 +659,8 @@ function checkQR(
                     "<br><br>" +
 
                     escapeHTML(
-                        response.message ||
-                        "Unknown server error"
+                        data.message ||
+                        "Unknown error"
                     )
 
                 );
@@ -716,19 +668,13 @@ function checkQR(
             }
 
 
-            // Restart scanner
-
             setTimeout(
-                startScanner,
-                2500
+                restartScanner,
+                3000
             );
 
         };
 
-
-    // =====================================================
-    // JSONP REQUEST
-    // =====================================================
 
     const script =
         document.createElement(
@@ -737,7 +683,6 @@ function checkQR(
 
 
     script.src =
-
         API_URL +
 
         "?id=" +
@@ -756,9 +701,11 @@ function checkQR(
     script.onerror =
         function() {
 
-            console.error(
-                "Attendance API connection failed."
-            );
+            if (finished) {
+                return;
+            }
+
+            finished = true;
 
 
             delete window[
@@ -776,8 +723,8 @@ function checkQR(
 
 
             setTimeout(
-                startScanner,
-                2500
+                restartScanner,
+                3000
             );
 
         };
@@ -790,38 +737,27 @@ function checkQR(
 }
 
 
-// ========================================================
-// QR FOUND
-// ========================================================
+/************************************************
+ * QR FOUND
+ ************************************************/
 
 function onScanSuccess(
     decodedText
 ) {
 
-    if (scanning) {
+    if (processing) {
 
         return;
 
     }
 
 
-    scanning = true;
-
-
-    const registrationID =
-        decodedText.trim();
-
-
-    console.log(
-        "QR scanned:",
-        registrationID
-    );
+    processing = true;
 
 
     if (scanner) {
 
-        scanner
-            .clear()
+        scanner.clear()
             .catch(
                 function() {}
             );
@@ -829,33 +765,49 @@ function onScanSuccess(
     }
 
 
-    checkQR(
-        registrationID
-    );
+    const id =
+        String(
+            decodedText
+        ).trim();
+
+
+    if (!id) {
+
+        processing = false;
+
+        restartScanner();
+
+        return;
+
+    }
+
+
+    checkQR(id);
 
 }
 
 
-// ========================================================
-// NORMAL SCAN FAILURE
-// ========================================================
+/************************************************
+ * SCAN FAILURE
+ ************************************************/
 
 function onScanFailure(
     error
 ) {
 
-    // Ignore normal failures.
+    // Normal camera scanning.
+    // Ignore failed frames.
 
 }
 
 
-// ========================================================
-// START SCANNER
-// ========================================================
+/************************************************
+ * START SCANNER
+ ************************************************/
 
 function startScanner() {
 
-    scanning = false;
+    processing = false;
 
 
     const reader =
@@ -905,26 +857,32 @@ function startScanner() {
 }
 
 
-// ========================================================
-// START
-// ========================================================
+/************************************************
+ * RESTART SCANNER
+ ************************************************/
 
-loadStatistics();
+function restartScanner() {
+
+    processing = false;
+
+    loadCounts();
+
+    startScanner();
+
+}
+
+
+/************************************************
+ * INITIAL LOAD
+ ************************************************/
+
+loadCounts();
 
 startScanner();
 
 
-// ========================================================
-// REFRESH COUNTS EVERY 5 SECONDS
-// ========================================================
-
-setInterval(
-    loadStatistics,
-    5000
-);
-
-
 </script>
+
 
 </body>
 
